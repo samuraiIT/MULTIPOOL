@@ -44,11 +44,12 @@ const Home: NextPage = () => {
 
     const items = [
         {label: 'Home', icon: 'pi pi-fw pi-home'},
-        {label: 'Calendar', icon: 'pi pi-fw pi-calendar'},
-        {label: 'Edit', icon: 'pi pi-fw pi-pencil'},
-        {label: 'Documentation', icon: 'pi pi-fw pi-file'},
-        {label: 'Settings', icon: 'pi pi-fw pi-cog'}
-    ]
+        {label: 'P2P Trading', icon: 'pi pi-fw'},
+        {label: 'Buy Crypto', icon: 'pi pi-fw'},
+        {label: 'Staking Pool', icon: 'pi pi-fw'},
+        {label: 'Webcasts', icon: 'pi pi-fw'},
+		{label: 'About', icon: 'pi pi-fw'}
+   ]
 
 ////////////////////////////
     // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
@@ -57,9 +58,6 @@ const Home: NextPage = () => {
     // You can also provide a custom RPC endpoint.
     const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-    // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
-    // Only the wallets you configure here will be compiled into your application, and only the dependencies
-    // of wallets that your users connect to will be loaded.
     const wallets = useMemo(
         () => [
             new PhantomWalletAdapter(),
@@ -74,7 +72,12 @@ const Home: NextPage = () => {
     );
 
     const headerCard = (
+	    <>
+	    <p className="m-0" style={{lineHeight: '1.5'}}>
+		  Multipool tech. 
+        </p>
         <img alt="Card" src="header.png" onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} />
+		</>
     )
     const footerCard = (
         <span>
@@ -102,7 +105,6 @@ const Home: NextPage = () => {
     }
 
     return (
-	<div className="App">
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
@@ -110,27 +112,32 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
         <Toast ref={toastRef} />
-             <div className="card">
-                <h5>Default</h5>
+            <Card>
                 <TabMenu model={items} />
-            </div>
-   
-        <header className="App-header">
-          <img src="logo.svg" className="App-logo" alt="logo" />
-        </header>
-
-      <form className="p-d-flex p-jc-center p-mt-6" onSubmit={onFormSubmit}>
-        <InputText value={text} onChange={(e) => setText(e.target.value)} />
-        <Button type="submit" label="Submit" icon="pi pi-check" className="p-ml-2" />
-      </form>	  
-      <main className={styles.main}>
-            <Card title="Multypool" subTitle="Subtitle" style={{ width: '25em' }} footer={footerCard} header={headerCard}>
-                <p className="m-0" style={{lineHeight: '1.5'}}>Multypool tech. 
-                    </p>
-            </Card> 
-        <div className={styles.grid}>
-
-        </div>
+            </Card>
+      <main className={styles.main}>  
+		<div class="grid grid-nogutter surface-section text-800">
+			<div class="col-8 md:col-4 p-6 text-center md:text-left flex align-items-center ">
+				<section>
+					<span class="block text-6xl font-bold mb-1">Make Investing Simple way</span>
+					<div class="text-6xl text-primary font-bold mb-3">MULTIPOOL service</div>
+					<p class="mt-0 mb-4 text-700 line-height-3"></p>
+					
+        <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+                <WalletModalProvider>
+                    <WalletMultiButton />
+                    <WalletDisconnectButton />
+                    { /* Your app's components go here, nested within the context providers. */ }
+                </WalletModalProvider>
+            </WalletProvider>
+        </ConnectionProvider>
+				</section>
+			</div>
+			<div class="col-12 md:col-6 overflow-hidden">
+				<img src="header.png" alt="Image" class="md:ml-auto block md:h-full" />
+			</div>
+		</div>
       </main>
       <footer className={styles.footer}>
         <a
@@ -138,56 +145,30 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Сделано{' '}
+          Сделано{' Multipool '}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Noop" width={72} height={16} />
           </span>
         </a>
       </footer>
-
-
-            <style jsx>{`             
-.App {
-    text-align: center;
-  }
-  
-  .App-logo {
-    height: 40vmin;
-    pointer-events: none;
-  }
-  
-  @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-      animation: App-logo-spin infinite 20s linear;
-    }
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    height: 60%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-`}</style>	  
-    </div>
+	  <style jsx>{`
+	      .App {
+            text-align: center;
+          }
+		  .App-header {
+			background-color: #282c34;
+			height: 60%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			font-size: calc(10px + 2vmin);
+			color: white;
+		  }
+		  img {
+		    clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)
+		  }
+      `}</style>	  
 	</div>
     )
 }
